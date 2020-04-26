@@ -15,8 +15,8 @@ class Player{
     currentHealth=300;
     final size = gameController.tileSize * 1.5;
     playerRect = Rect.fromLTWH(
-      gameController.screenSize.width/2, 
-      gameController.screenSize.height/2, 
+      gameController.screenSize.width/2 - size/2, 
+      gameController.screenSize.height/2 - size/2, 
       size, 
       size
     );
