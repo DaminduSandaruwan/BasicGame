@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:basic_game/component/player.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
 class GameController extends Game{
   Size screenSize;
   double tileSize;
+  Player player;
 
   GameController(){
     initialize();
@@ -12,12 +14,14 @@ class GameController extends Game{
 
   void initialize() async{
     resize(await Flame.util.initialDimensions());
+    player = Player(this);
   }
 
   void render(Canvas c) {
-    Rect background = Rect.fromLTRB(0, 0, screenSize.width, screenSize.height);
+    Rect background = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgroundPaint = Paint()..color =  Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
+    player.render(c);
   }
 
   void update(double t) {
