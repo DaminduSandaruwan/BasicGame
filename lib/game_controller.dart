@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:basic_game/component/enemy.dart';
+import 'package:basic_game/component/health_bar.dart';
 import 'package:basic_game/component/player.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -10,15 +11,17 @@ class GameController extends Game{
   double tileSize;
   Player player;
   Enemy enemy;
+  HealthBar healthBar;
 
   GameController(){
     initialize();
   }
 
-  void initialize() async{
+  void initialize() async{ 
     resize(await Flame.util.initialDimensions());
     player = Player(this);
     enemy = Enemy(this,200,200);
+    healthBar = HealthBar(this);
   }
 
   void render(Canvas c) {
@@ -27,11 +30,13 @@ class GameController extends Game{
     c.drawRect(background, backgroundPaint);
     player.render(c);
     enemy.render(c);
+    healthBar.render(c);
   }
 
   void update(double t) {
     enemy.update(t);
     player.update(t);
+    healthBar.update(t);
   }
 
   void resize(Size size){
