@@ -31,6 +31,7 @@ class GameController extends Game{
 
   void update(double t) {
     enemy.update(t);
+    player.update(t);
   }
 
   void resize(Size size){

@@ -46,10 +46,19 @@ class Enemy{
     if(!isDead){
       double stepDistance = speed * t;
       Offset toPlayer = gameController.player.playerRect.center - enemyRect.center;
-      if(stepDistance<= toPlayer.distance){
+      if(stepDistance<= toPlayer.distance - gameController.tileSize * 1.25){
         Offset stepToPlayer = Offset.fromDirection(toPlayer.direction,stepDistance);
         enemyRect = enemyRect.shift(stepToPlayer);
       }
+      else{
+        attack();
+      }
+    }
+  }
+
+  void attack(){
+    if(!gameController.player.isDead){
+      gameController.player.currentHealth -=damage;
     }
   }
 
