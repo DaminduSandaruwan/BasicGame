@@ -25,7 +25,7 @@ class Enemy{
     Color color;
     switch (health){
       case 1:
-        color = Color(0xFFFF7F7);
+        color = Color(0xFFFF7F7F);
         break;
       case 2:
         color = Color(0xFFFF4C4C);

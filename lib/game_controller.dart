@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:basic_game/component/enemy.dart';
 import 'package:basic_game/component/health_bar.dart';
 import 'package:basic_game/component/player.dart';
+import 'package:basic_game/enemy_spawner.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ class GameController extends Game{
   Size screenSize;
   double tileSize;
   Player player;
+  EnemySpawner enemySpawner;
   List<Enemy> enemies;
   HealthBar healthBar;
 
@@ -22,8 +24,9 @@ class GameController extends Game{
   void initialize() async{ 
     resize(await Flame.util.initialDimensions());
     rand = Random();
-    player = Player(this);
+    player = Player(this);    
     enemies = List<Enemy>();
+    enemySpawner = EnemySpawner(this);
     healthBar = HealthBar(this);
     spawnEnemy();
   }
@@ -38,7 +41,9 @@ class GameController extends Game{
   }
 
   void update(double t) {
+    enemySpawner.update(t);
     enemies.forEach((Enemy enemy)=>enemy.update(t));
+    enemies.removeWhere((Enemy enemy)=>enemy.isDead);
     player.update(t);
     healthBar.update(t);
   }
