@@ -16,6 +16,7 @@ class GameController extends Game{
   EnemySpawner enemySpawner;
   List<Enemy> enemies;
   HealthBar healthBar;
+  int score;
 
   GameController(){
     initialize();
@@ -28,7 +29,8 @@ class GameController extends Game{
     enemies = List<Enemy>();
     enemySpawner = EnemySpawner(this);
     healthBar = HealthBar(this);
-    spawnEnemy();
+    score = 0;
+    //spawnEnemy();
   }
 
   void render(Canvas c) {
