@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:basic_game/component/enemy.dart';
 import 'package:basic_game/component/health_bar.dart';
@@ -7,10 +8,11 @@ import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 
 class GameController extends Game{
+  Random rand;
   Size screenSize;
   double tileSize;
   Player player;
-  Enemy enemy;
+  List<Enemy> enemies;
   HealthBar healthBar;
 
   GameController(){
@@ -19,9 +21,11 @@ class GameController extends Game{
 
   void initialize() async{ 
     resize(await Flame.util.initialDimensions());
+    rand = Random();
     player = Player(this);
-    enemy = Enemy(this,200,200);
+    enemies = List<Enemy>();
     healthBar = HealthBar(this);
+    spawnEnemy();
   }
 
   void render(Canvas c) {
@@ -29,12 +33,12 @@ class GameController extends Game{
     Paint backgroundPaint = Paint()..color =  Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
     player.render(c);
-    enemy.render(c);
+    enemies.forEach((Enemy enemy)=>enemy.render(c));
     healthBar.render(c);
   }
 
   void update(double t) {
-    enemy.update(t);
+    enemies.forEach((Enemy enemy)=>enemy.update(t));
     player.update(t);
     healthBar.update(t);
   }
@@ -46,6 +50,38 @@ class GameController extends Game{
 
   void onTapDown (TapDownDetails d){
     print(d.globalPosition);
-    enemy.health--;
+    enemies.forEach((Enemy enemy){
+      if(enemy.enemyRect.contains(d.globalPosition)){
+        enemy.onTapDown();
+      }
+    });
+  }
+
+  void spawnEnemy(){
+    double x,y;
+    switch (rand.nextInt(4)){
+      case 0: 
+        //top
+        x = rand.nextDouble() * screenSize.width;
+        y = -tileSize*2.5;
+        break;
+      case 1:
+        //right
+        x = screenSize.width + tileSize*2.5;
+        y = rand.nextDouble() * screenSize.height;
+        break;
+      case 2:
+        //bottom
+        x = rand.nextDouble() * screenSize.width;
+        y = screenSize.height + tileSize *  2.5;
+        break;
+      case 3:
+        //left
+        x = -tileSize * 2.5;
+        y = rand.nextDouble() * screenSize.height;
+        break;
+
+    }
+    enemies.add(Enemy(this,x,y));
   }
 } 
