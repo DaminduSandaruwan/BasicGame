@@ -20,7 +20,6 @@ class Player{
       size, 
       size
     );
-
   }
 
   void render(Canvas c){

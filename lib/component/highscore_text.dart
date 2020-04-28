@@ -25,7 +25,8 @@ class HighscoreText{
       text: 'Highscore: $highscore',
       style: TextStyle(
         color: Colors.black,
-        fontSize: 40.0
+        fontWeight: FontWeight.bold,
+        fontSize: 40.0,
       ),
     );
 
