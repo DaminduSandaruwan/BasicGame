@@ -5,11 +5,14 @@ import 'package:basic_game/component/health_bar.dart';
 import 'package:basic_game/component/player.dart';
 import 'package:basic_game/component/score_text.dart';
 import 'package:basic_game/enemy_spawner.dart';
+import 'package:basic_game/state.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GameController extends Game{
+  final SharedPreferences storage;
   Random rand;
   Size screenSize;
   double tileSize;
@@ -19,13 +22,15 @@ class GameController extends Game{
   HealthBar healthBar;
   int score;
   ScoreText scoreText;
+  States state;
 
-  GameController(){
+  GameController(this.storage){
     initialize();
   }
 
   void initialize() async{ 
     resize(await Flame.util.initialDimensions());
+    state = States.menu;
     rand = Random();
     player = Player(this);    
     enemies = List<Enemy>();
@@ -41,18 +46,31 @@ class GameController extends Game{
     Paint backgroundPaint = Paint()..color =  Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
     player.render(c);
-    enemies.forEach((Enemy enemy)=>enemy.render(c));
-    scoreText.render(c);
-    healthBar.render(c);
+
+    if(state==States.menu){
+      //startButton.render(c);
+      //highscoreText.render(c);
+    }
+    else if(state == States.playing){
+      enemies.forEach((Enemy enemy)=>enemy.render(c));
+      scoreText.render(c);
+      healthBar.render(c);
+    }    
   }
 
   void update(double t) {
-    enemySpawner.update(t);
-    enemies.forEach((Enemy enemy)=>enemy.update(t));
-    enemies.removeWhere((Enemy enemy)=>enemy.isDead);
-    player.update(t);
-    scoreText.update(t);
-    healthBar.update(t);
+    if(state == States.menu){
+      //startButton.update(t);
+      //highscoreText.update(t); 
+
+    } else if(state==States.playing){
+      enemySpawner.update(t);
+      enemies.forEach((Enemy enemy)=>enemy.update(t));
+      enemies.removeWhere((Enemy enemy)=>enemy.isDead);
+      player.update(t);
+      scoreText.update(t);
+      healthBar.update(t);
+    }  
   }
 
   void resize(Size size){
@@ -61,16 +79,20 @@ class GameController extends Game{
   }
 
   void onTapDown (TapDownDetails d){
-    print(d.globalPosition);
-    enemies.forEach((Enemy enemy){
-      if(enemy.enemyRect.contains(d.globalPosition)){
-        enemy.onTapDown();
-      }
-    });
+    //print(d.globalPosition);
+    if(state == States.menu){
+      state = States.playing;
+    } else if(state == States.playing){
+      enemies.forEach((Enemy enemy){
+        if(enemy.enemyRect.contains(d.globalPosition)){
+          enemy.onTapDown();
+        }
+      });
+    }
   }
 
   void spawnEnemy(){
-    double x,y;
+    double x,y; 
     switch (rand.nextInt(4)){
       case 0: 
         //top

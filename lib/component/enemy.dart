@@ -69,7 +69,10 @@ class Enemy{
         isDead=true;
         //score
         gameController.score++;
-        print(gameController.score);
+        //print(gameController.score);
+        if (gameController.score > gameController.storage.getInt('highscore')?? 0){
+          gameController.storage.setInt('highscore', gameController.score);
+        }
       }
 
     }

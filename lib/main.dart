@@ -6,11 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() async {
   
-
-  GameController gameController = GameController();
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences storage = await SharedPreferences.getInstance();
+  GameController gameController = GameController(storage);
+  
+  
   Timer(Duration(seconds:10),(){
     
     runApp(gameController.widget);
