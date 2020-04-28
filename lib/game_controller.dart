@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:basic_game/component/enemy.dart';
 import 'package:basic_game/component/health_bar.dart';
 import 'package:basic_game/component/player.dart';
+import 'package:basic_game/component/score_text.dart';
 import 'package:basic_game/enemy_spawner.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -17,6 +18,7 @@ class GameController extends Game{
   List<Enemy> enemies;
   HealthBar healthBar;
   int score;
+  ScoreText scoreText;
 
   GameController(){
     initialize();
@@ -30,6 +32,7 @@ class GameController extends Game{
     enemySpawner = EnemySpawner(this);
     healthBar = HealthBar(this);
     score = 0;
+    scoreText =ScoreText(this);
     //spawnEnemy();
   }
 
@@ -39,6 +42,7 @@ class GameController extends Game{
     c.drawRect(background, backgroundPaint);
     player.render(c);
     enemies.forEach((Enemy enemy)=>enemy.render(c));
+    scoreText.render(c);
     healthBar.render(c);
   }
 
@@ -47,6 +51,7 @@ class GameController extends Game{
     enemies.forEach((Enemy enemy)=>enemy.update(t));
     enemies.removeWhere((Enemy enemy)=>enemy.isDead);
     player.update(t);
+    scoreText.update(t);
     healthBar.update(t);
   }
 

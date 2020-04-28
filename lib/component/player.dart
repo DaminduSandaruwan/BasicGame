@@ -33,6 +33,7 @@ class Player{
     if(!isDead && currentHealth<=0){
       isDead=true;
       //reset game 
+      gameController.initialize();
     }
   }
 
