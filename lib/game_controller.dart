@@ -5,6 +5,7 @@ import 'package:basic_game/component/health_bar.dart';
 import 'package:basic_game/component/highscore_text.dart';
 import 'package:basic_game/component/player.dart';
 import 'package:basic_game/component/score_text.dart';
+import 'package:basic_game/component/start_text.dart';
 import 'package:basic_game/enemy_spawner.dart';
 import 'package:basic_game/state.dart';
 import 'package:flame/flame.dart';
@@ -25,6 +26,7 @@ class GameController extends Game{
   ScoreText scoreText;
   States state;
   HighscoreText highscoreText;
+  StartText startText;
 
   GameController(this.storage){
     initialize();
@@ -41,6 +43,7 @@ class GameController extends Game{
     score = 0;
     scoreText =ScoreText(this);
     highscoreText = HighscoreText(this);
+    startText = StartText(this);
     //spawnEnemy();
   }
 
@@ -51,7 +54,7 @@ class GameController extends Game{
     player.render(c);
 
     if(state==States.menu){
-      //startButton.render(c);
+      startText.render(c);
       highscoreText.render(c);
     }
     else if(state == States.playing){
@@ -63,7 +66,7 @@ class GameController extends Game{
 
   void update(double t) {
     if(state == States.menu){
-      //startButton.update(t);
+      startText.update(t);
       highscoreText.update(t); 
 
     } else if(state==States.playing){
